@@ -9,10 +9,11 @@ void FlightControl(){
   pid_compute();
   
   // yaw control disabled for stabilization testing...
-  m0 = throttle + pid_pitch_out ;//+ pid_yaw_out;
-  m1 = throttle + pid_roll_out ;//- pid_yaw_out;
-  m2 = throttle - pid_pitch_out ;//+ pid_yaw_out;
-  m3 = throttle - pid_roll_out ;//- pid_yaw_out;
+
+  m0=throttle+pid_roll_out+pid_pitch_out; //+pid_yaw_out
+  m1=throttle-pid_roll_out+pid_pitch_out; //-pid_yaw_out
+  m2=throttle+pid_roll_out-pid_pitch_out; //-pid_yaw_out
+  m3=throttle-pid_roll_out-pid_pitch_out; //+pid_yaw_out
   
   Serial.print("pid: ");
   Serial.print(throttle);
