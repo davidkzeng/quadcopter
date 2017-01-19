@@ -90,9 +90,9 @@
 
 
 //Motor Pins
-#define PIN_MOTOR0  6
-#define PIN_MOTOR1  7
-#define PIN_MOTOR2  8
-#define PIN_MOTOR3  9
+#define PIN_MOTOR0  4
+#define PIN_MOTOR1  5
+#define PIN_MOTOR2  6
+#define PIN_MOTOR3  7
 
 
