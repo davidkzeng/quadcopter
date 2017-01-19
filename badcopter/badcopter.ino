@@ -4,30 +4,7 @@
 
 #include <BMI160.h>
 #include <CurieIMU.h>
-
-/*
-  BlueCopter - Quadcopter firmware
-  
-  Created by Basel Al-Rudainy, 6 april 2013.
-  
-  This library is free software; you can redistribute it and/or
-  modify it under the terms of the GNU Lesser General Public
-  License as published by the Free Software Foundation; either
-  version 2.1 of the License, or (at your option) any later version.
-
-  This library is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-  Lesser General Public License for more details.
-  
-  Change log:
-  V1.02 - Implemented a proper receiver expo for smooth response.
-          Commenting the line "#define RX_EXPO" will disable the RX-expo.
-  V1.01 - Made the sketch run more efficiently and reduced code size. 
-          With this change I managed to find better PID values and thus
-          get better/faster stabilization 
-  V1.00 - BlueCopter firmware created!
-*/
+#include <CurieBLE.h>
 
 #include "Config.h"
 #include <MPULib.h>
@@ -37,14 +14,13 @@
 #include <Servo.h>
 
 Madgwick filter;
-PIDCont PIDroll,PIDpitch,PIDyaw,PIDangleX,PIDangleY;
-MPULib MPU;
 Servo motor0;
 Servo motor1;
 Servo motor2;
 Servo motor3;
 unsigned long microsPerReading, microsPrevious;
 unsigned long microsFirst;
+unsigned int throttle_value = 900;
 float angleX,angleY,angleZ = 0.0;
 
 // RX Signals
@@ -61,14 +37,14 @@ int m0, m1, m2, m3; // Front, Right, Back, Left
 
 // Track loop time.
 unsigned long prev_time = 0;
-
+BLEPeripheral blePeripheral; // create peripheral instance
+BLEService throttleService("19B10010-E8F2-537E-4F6C-D104768A1214"); // create service
+BLEUnsignedIntCharacteristic throttleCharacteristic("19B10011-E8F2-537E-4F6C-D104768A1214", BLERead | BLEWrite);
 
 void setup() {
   Serial.begin(9600);
   while(!Serial);
-#ifdef DEBUG  
-#endif
-  MPU.init();
+  
   Serial.println("mpuinit");
   motorInit();
   Serial.println("motorinit");
@@ -91,22 +67,38 @@ void setup() {
   CurieIMU.autoCalibrateGyroOffset();
   Serial.println(" Done");
 
-  Serial.print("Starting Acceleration calibration and enabling offset compensation...");
+  Serial.println("Starting Acceleration calibration and enabling offset compensation...");
   CurieIMU.autoCalibrateAccelerometerOffset(X_AXIS, 0);
   CurieIMU.autoCalibrateAccelerometerOffset(Y_AXIS, 0);
   CurieIMU.autoCalibrateAccelerometerOffset(Z_AXIS, 1);
+
+  blePeripheral.setLocalName("Throttle");
+  // set the UUID for the service this peripheral advertises:
+  blePeripheral.setAdvertisedServiceUuid(throttleService.uuid());
+
+  // add service and characteristics
+  blePeripheral.addAttribute(throttleService);
+  blePeripheral.addAttribute(throttleCharacteristic);
+
+  throttleCharacteristic.setValue(0);
+
+  // advertise the service
+  blePeripheral.begin();
+  Serial.println("begun service");
 }
 
+
+
 void loop() {
+  blePeripheral.poll();
   // Serial.println("in main loop");
-  if(micros() - microsFirst < 10000000) {
-    motor0.write(0);
-    motor1.write(0);
-    motor2.write(0);
-    motor3.write(0);
-  } else {
-    imu_update();
-    FlightControl();
+  if (throttleCharacteristic.written()) {
+    int val = throttleCharacteristic.value();
+    // update LED, either central has written to characteristic or button state has changed
+    throttle_value = val;
+    Serial.println("lol");
   }
+  imu_update();
+  FlightControl();
   prev_time = micros();
 }

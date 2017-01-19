@@ -62,12 +62,13 @@ void imu_update(){
       angleY -= 360;  
     if (angleZ > 180)
       angleZ -= 360;
+     /*
     Serial.print("Orientation: ");
     Serial.print(angleX);
     Serial.print(" ");
     Serial.print(angleY);
     Serial.print(" ");
-    Serial.println(angleZ);
+    Serial.println(angleZ);*/
 
     // increment previous time, so we keep proper pace
     microsPrevious = microsPrevious + microsPerReading;

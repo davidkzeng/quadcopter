@@ -1,5 +1,5 @@
 void FlightControl(){
-  rx_values[2] = 1050;
+  rx_values[2] = throttle_value;
   throttle=map(rx_values[2],THROTTLE_RMIN,THROTTLE_RMAX,MOTOR_ZERO_LEVEL,MOTOR_MAX_LEVEL);
   
   pid_roll_setpoint = 0;
@@ -13,12 +13,14 @@ void FlightControl(){
   m1 = throttle + pid_roll_out ;//- pid_yaw_out;
   m2 = throttle - pid_pitch_out ;//+ pid_yaw_out;
   m3 = throttle - pid_roll_out ;//- pid_yaw_out;
+  
   Serial.print("pid: ");
   Serial.print(throttle);
   Serial.print(" ");
   Serial.print(pid_pitch_out);
   Serial.print(" ");
   Serial.println(pid_roll_out);
+  
   /*
   #ifdef SAFE
     if(throttle < THROTTLE_SAFE_SHUTOFF)
