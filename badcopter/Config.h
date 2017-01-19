@@ -48,37 +48,6 @@
 #define YAW_WMAX  30
 //..........................
 
-//----Debug Config---------
-//#define DEBUG
-//#define DEBUG_ANGLES
-//#define DEBUG_GYRO
-//#define DEBUG_PID
-//#define DEBUG_RX
-//#define DEBUG_SERIAL_CHART
-
-//-------------------------
-
-
-//*********Sensor Config****************
-
-/*
-#define ACC_X_OFFSET  19
-#define ACC_Y_OFFSET  7
-#define ACC_Z_OFFSET  -73
-
-#define GYRO_X_OFFSET  1.418431
-#define GYRO_Y_OFFSET  -1.05606
-#define GYRO_Z_OFFSET  -0.54401
-*/
-
-#define SPLIT  0.99 //COMP-filter nr
-#define RadToDeg 180.0/PI 
-#define  ACC_HPF_NR  98  //high pass filter nr
-#define  GYRO_HPF_NR 0   //high pass filter nr
-#define  GYRO_MAF_NR  2  //Moving average filter nr
-//*************************************
-
-
 
 
 //***********MOTOR CONFIG**************
@@ -95,4 +64,13 @@
 #define PIN_MOTOR2  6
 #define PIN_MOTOR3  7
 
+#define MOTOR0_MIN 1034
+#define MOTOR1_MIN 1034
+#define MOTOR2_MIN 1034
+#define MOTOR3_MIN 1034
+
+#define MOTOR0_SCALE 1
+#define MOTOR1_SCALE 1
+#define MOTOR2_SCALE 1
+#define MOTOR3_SCALE 1
 
