@@ -17,10 +17,13 @@ Serial.begin(9600);
 
 void loop() {
 int key = getIRKey();             //Fetch the key
-if (key != -1) {
+/*if (key != -1) {
   Serial.print("Key Recieved: ");
   Serial.println(key);
-}
+}*/
+
+Serial.println(pulseIn(ir_pin,LOW));
+Serial.println(pulseIn(ir_pin, HIGH));
 }
 
 
