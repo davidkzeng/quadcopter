@@ -2,7 +2,7 @@
 
 PID roll_controller(&pid_roll_in,   &pid_roll_out,  &pid_roll_setpoint,  0.25, 0.95, 0.011, REVERSE);
 PID pitch_controller(&pid_pitch_in, &pid_pitch_out, &pid_pitch_setpoint, 0.25, 0.95, 0.011, REVERSE);
-PID yaw_controller(&pid_yaw_in,     &pid_yaw_out,   &pid_yaw_setpoint,   1.0, 0.0, 0.0, DIRECT); 
+PID yaw_controller(&pid_yaw_in,     &pid_yaw_out,   &pid_yaw_setpoint,   0.680, 0.0, 0.0, DIRECT); 
 
 void pid_initialize() {
   roll_controller.SetOutputLimits(ROLL_PID_MIN,ROLL_PID_MAX);
@@ -57,20 +57,21 @@ void imu_update(){
     angleX = filter.getRoll();
     angleY = filter.getPitch();
     angleZ = filter.getYaw();
+    angleZ += 180;
     if (angleX > 180)
       angleX -= 360;
     if (angleY > 180)
       angleY -= 360;  
     if (angleZ > 180)
       angleZ -= 360;
-    /*
+    
     Serial.print("Orientation: ");
     Serial.print(angleX);
     Serial.print(" ");
     Serial.print(angleY);
     Serial.print(" ");
     Serial.println(angleZ);
-    */
+    
     // increment previous time, so we keep proper pace
     microsPrevious = microsPrevious + microsPerReading;
   }

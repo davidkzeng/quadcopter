@@ -19,14 +19,15 @@ void FlightControl(){
     m2 = 1000;
     m3 = 1000;
   }
-  /*
+  
   Serial.print("pid: ");
   Serial.print(throttle);
   Serial.print(" ");
   Serial.print(pid_pitch_out);
   Serial.print(" ");
-  Serial.println(pid_roll_out);
-  */
+  Serial.print(pid_roll_out);
+  Serial.print(" ");
+  Serial.println(pid_yaw_out);
   /*
   #ifdef SAFE
     if(throttle < THROTTLE_SAFE_SHUTOFF)
