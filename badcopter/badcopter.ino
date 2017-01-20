@@ -73,7 +73,7 @@ void setup() {
   CurieIMU.autoCalibrateAccelerometerOffset(Y_AXIS, 0);
   CurieIMU.autoCalibrateAccelerometerOffset(Z_AXIS, 1);
 
-  blePeripheral.setLocalName("Throttle");
+  blePeripheral.setLocalName("Throttle 2");
   // set the UUID for the service this peripheral advertises:
   blePeripheral.setAdvertisedServiceUuid(throttleService.uuid());
 
@@ -103,16 +103,20 @@ void loop() {
   blePeripheral.poll();
   // Serial.println("in main loop");
   if (throttleCharacteristic.written()) {
+    shutOffTime = micros() + 15000000;
     int val = throttleCharacteristic.value();
-    if (val == 1) {
-      shutOffTime = micros() + 15000000;
-    } else if (val == 10) {
-      recalibrate();
-    } else {
-    // update LED, either central has written to characteristic or button state has changed
-      throttle_value = val;
+    if (val == 0) {
+      throttle_value = 900;
+    } else if (val == 2020) {
+      throttle_value += 20;
+    } else if (val == 2040) {
+      throttle_value -= 20;
+    } else if (val == 1000) {
+      throttle_value = 1000;
+    } else if (val == 2060) {
+      // pass
     }
-    Serial.println("lol");
+    Serial.println(throttle_value);
   }
   imu_update();
   FlightControl();
