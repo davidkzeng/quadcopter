@@ -74,3 +74,9 @@
 #define MOTOR2_SCALE 1
 #define MOTOR3_SCALE 1
 
+//Receiver Pins
+#define IRR1 10
+#define IRR2 11
+#define IRR3 12
+#define IRR4 13
+

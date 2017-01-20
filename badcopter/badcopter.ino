@@ -12,17 +12,22 @@
 #include <PIDCont.h>
 #include <avr/pgmspace.h>
 #include <Servo.h>
+#include <Timer.h>
 
 Madgwick filter;
 Servo motor0;
 Servo motor1;
 Servo motor2;
 Servo motor3;
+Timer t;
+
 unsigned long microsPerReading, microsPrevious;
 unsigned long microsFirst;
 unsigned int throttle_value = 900;
 unsigned long shutOffTime = 0;
 float angleX,angleY,angleZ = 0.0;
+int values [4];
+int angle;
 
 // RX Signals
 int throttle=THROTTLE_RMIN;
@@ -86,6 +91,13 @@ void setup() {
   // advertise the service
   blePeripheral.begin();
   Serial.println("begun service");
+
+  pinMode(IRR1, INPUT);
+  pinMode(IRR2, INPUT);
+  pinMode(IRR3, INPUT);
+  pinMode(IRR4, INPUT);
+
+  t.every(100, getAngle);
 }
 
 
@@ -117,4 +129,8 @@ void loop() {
   imu_update();
   FlightControl();
   prev_time = micros();
+
+  //update the receiver values
+  updateValues(); 
+  t.update();
 }
