@@ -22,7 +22,7 @@
 #define YAW_PID_KP  0.680
 #define YAW_PID_KI  0.500
 #define YAW_PID_KD  0.0001
-#define YAW_PID_MIN  100.0
+#define YAW_PID_MIN  -100.0
 #define YAW_PID_MAX  100.0
 
 
