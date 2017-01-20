@@ -1,6 +1,7 @@
 
-PID roll_controller(&pid_roll_in,   &pid_roll_out,  &pid_roll_setpoint,  5.0, 0.0, 0.0, REVERSE);
-PID pitch_controller(&pid_pitch_in, &pid_pitch_out, &pid_pitch_setpoint, 5.0, 0.0, 0.0, REVERSE);
+
+PID roll_controller(&pid_roll_in,   &pid_roll_out,  &pid_roll_setpoint,  0.25, 0.95, 0.011, REVERSE);
+PID pitch_controller(&pid_pitch_in, &pid_pitch_out, &pid_pitch_setpoint, 0.25, 0.95, 0.011, REVERSE);
 PID yaw_controller(&pid_yaw_in,     &pid_yaw_out,   &pid_yaw_setpoint,   1.0, 0.0, 0.0, DIRECT); 
 
 void pid_initialize() {

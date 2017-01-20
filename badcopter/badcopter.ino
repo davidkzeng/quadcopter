@@ -21,6 +21,7 @@ Servo motor3;
 unsigned long microsPerReading, microsPrevious;
 unsigned long microsFirst;
 unsigned int throttle_value = 900;
+unsigned long shutOffTime = 0;
 float angleX,angleY,angleZ = 0.0;
 
 // RX Signals
@@ -88,14 +89,29 @@ void setup() {
 }
 
 
+void recalibrate() {
+  CurieIMU.autoCalibrateGyroOffset();
+  Serial.println(" Done");
+
+  Serial.println("Starting Acceleration calibration and enabling offset compensation...");
+  CurieIMU.autoCalibrateAccelerometerOffset(X_AXIS, 0);
+  CurieIMU.autoCalibrateAccelerometerOffset(Y_AXIS, 0);
+  CurieIMU.autoCalibrateAccelerometerOffset(Z_AXIS, 1);
+}
 
 void loop() {
   blePeripheral.poll();
   // Serial.println("in main loop");
   if (throttleCharacteristic.written()) {
     int val = throttleCharacteristic.value();
+    if (val == 1) {
+      shutOffTime = micros() + 15000000;
+    } else if (val == 10) {
+      recalibrate();
+    } else {
     // update LED, either central has written to characteristic or button state has changed
-    throttle_value = val;
+      throttle_value = val;
+    }
     Serial.println("lol");
   }
   imu_update();
