@@ -9,10 +9,10 @@ void FlightControl(){
   
   // yaw control disabled for stabilization testing...
   if (throttle >= 1000 && (shutOffTime == 0 || micros() < shutOffTime)) {
-    m0=throttle + pid_roll_out + pid_pitch_out; //+pid_yaw_out
-    m1=throttle - pid_roll_out + pid_pitch_out; //-pid_yaw_out
-    m2=throttle + pid_roll_out - pid_pitch_out; //-pid_yaw_out
-    m3=throttle - pid_roll_out - pid_pitch_out; //+pid_yaw_out
+    m0=throttle + pid_roll_out + pid_pitch_out + pid_yaw_out;
+    m1=throttle - pid_roll_out + pid_pitch_out - pid_yaw_out;
+    m2=throttle + pid_roll_out - pid_pitch_out - pid_yaw_out;
+    m3=throttle - pid_roll_out - pid_pitch_out + pid_yaw_out;
   } else {
     m0 = 1000;
     m1 = 1000;
